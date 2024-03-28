@@ -1,0 +1,202 @@
+#include<iostream>
+using namespace std;
+class node{
+    public: int data;
+    node* next;
+
+//constructor
+node(int data){
+    this->data=data;
+    this->next=NULL;
+}
+//destructor
+~node(){
+    int value=this->data;
+    //memory free
+    if(this->next != NULL){
+        delete next;
+        this -> next=NULL;
+    }
+    cout<<"memory is free for node with data "<<value<<endl; 
+}
+};
+void insertAtHead(node* &head,int d){
+
+//new node create
+node* temp=new node(d);
+temp->next=head;
+head=temp;
+}
+
+void insertAtTail(node* & tail,int d){
+//new node create
+    node* temp=new node(d);
+    tail->next=temp;
+    tail=temp;
+}
+
+void print(node* &head){
+    node* temp=head;
+
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+    cout<<endl;
+}
+
+void insertAtposition(node* &head,node* &tail,int position,int d){
+    //insert at start
+    if(position==1){
+        insertAtHead(head,d);
+        return;
+    }
+
+    node* temp=head;
+    int count=1;
+    while(count<position-1){
+        temp=temp->next;
+        count++;
+    }
+
+
+    //insertt at last position
+    if(temp->next== NULL){
+        insertAtTail(tail,d);
+        return;
+    }
+
+    //create a nodee for d
+    node* nodeToinsert=new node(d);
+    nodeToinsert->next=temp->next;
+    temp->next=nodeToinsert;
+ }
+ void deletenode(int position,node* & head){
+    //deleting first or start node
+    if(position==1){
+        node* temp=head;
+        head = head->next;
+
+
+        //memory free start node
+        temp->next=NULL;
+        delete temp;
+    }
+    else{
+        //deleting any middle node or last node
+        node* current=head;
+        node* previous=NULL;
+
+
+        int count=1;
+        if(count<position){
+        previous=current;
+        current=current->next;
+        count++;
+        }
+
+        previous->next=current->next;
+        current->next=NULL;
+        delete current; 
+    }
+ }
+
+
+
+node* floyDetectLoop(node* head){
+    if(head==NULL)
+    return NULL;
+       
+     node* slow=head;
+     node* fast=head;
+
+
+    while(slow!=NULL && fast!=NULL ){
+        fast=fast->next;
+        if(fast!=NULL){
+            fast=fast->next;
+        }
+        slow=slow->next;
+        
+        if(slow==fast){
+            cout<<"It is present:"<<slow->data<<endl;
+            return slow;
+        }
+
+
+    }
+    return NULL;
+}
+
+
+node* getstartnode(node* head){
+    if(head==NULL)
+    return NULL;
+
+    node* intersection=floyDetectLoop(head);
+    node* slow=head;
+
+    while(slow != intersection){
+        slow=slow->next;
+        intersection=intersection->next;
+    }
+    return slow;
+}
+
+void removeLoop(node* head){
+     if(head=NULL)
+     return ;
+
+     node* startOfLoop=getstartnode(head);
+     node* temp=startOfLoop;
+
+
+     while(temp->next!=startOfLoop){
+        temp=temp->next;
+     }
+     temp->next=NULL;
+     
+}
+
+
+int main(){
+node* node1=new node(10);
+//cout<<node1->data<<endl;
+//cout<<node1->next<<endl;
+
+//head pointer to node1
+node* head=node1;
+node* tail=node1;
+print(head);
+insertAtTail(tail,12);
+print(head);
+
+insertAtTail(tail,17);
+print(head);
+insertAtposition(head,tail,3,22);
+print(head);
+//cout<<"head:"<<head->data<<endl;
+//cout<<"tail:"<<tail->data<<endl;
+ //deletenode(4,head);
+ //print(head);
+ tail->next=head->next;
+ cout<<"head:"<<head->data<<endl;
+cout<<"tail:"<<tail->data<<endl;
+  
+
+
+if(floyDetectLoop(head)!=NULL){
+cout<<"It is a loop present"<<endl;
+}
+else{
+    cout<<"is not present";
+}
+
+node* loop=getstartnode(head);
+cout<<"Loop starts at:"<<loop->data<<endl;
+
+removeLoop(head);
+print(head);
+
+return 0;
+}

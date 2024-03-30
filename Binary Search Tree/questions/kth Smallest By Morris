@@ -1,0 +1,76 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class BinaryTreeNode {
+public:
+    T data;
+    BinaryTreeNode<T>* left;
+    BinaryTreeNode<T>* right;
+
+    BinaryTreeNode(T data) {
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+int kthSmallest(BinaryTreeNode<int>* root, int k) {
+    int count = 0;
+    int kthSmallest = -1;
+    BinaryTreeNode<int>* current = root;
+
+    while (current != NULL) {
+        if (current->left == NULL) {
+            count++;
+            if (count == k)
+                kthSmallest = current->data;
+            current = current->right;
+        } else {
+            // Find the inorder predecessor of current
+            BinaryTreeNode<int>* predecessor = current->left;
+            while (predecessor->right != NULL && predecessor->right != current)
+                predecessor = predecessor->right;
+
+            if (predecessor->right == NULL) {
+                // Make current as the right child of its inorder predecessor
+                predecessor->right = current;
+                current = current->left;
+            } else {
+                // Revert the changes made in the 'if' block above
+                predecessor->right = NULL;
+                count++;
+                if (count == k)
+                    kthSmallest = current->data;
+                current = current->right;
+            }
+        }
+    }
+
+    return kthSmallest;
+}
+
+// Example usage
+int main() {
+    BinaryTreeNode<int>* root = new BinaryTreeNode<int>(5);
+    root->left = new BinaryTreeNode<int>(3);
+    root->right = new BinaryTreeNode<int>(7);
+    root->left->left = new BinaryTreeNode<int>(2);
+    root->left->right = new BinaryTreeNode<int>(4);
+    root->right->left = new BinaryTreeNode<int>(6);
+    root->right->right = new BinaryTreeNode<int>(8);
+
+    int k = 3;
+    cout << "Kth smallest element is: " << kthSmallest(root, k) << endl; // Output should be 4
+
+    // Clean up
+    delete root->left->left;
+    delete root->left->right;
+    delete root->right->left;
+    delete root->right->right;
+    delete root->left;
+    delete root->right;
+    delete root;
+
+    return 0;
+}

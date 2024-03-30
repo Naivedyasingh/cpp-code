@@ -1,0 +1,42 @@
+pair<int, int> predecessorSuccessor(TreeNode* root, int key) {
+    TreeNode* KeyNode = root;
+    int pred = -1;
+    int succ = -1;
+    
+    while(KeyNode != NULL && KeyNode->data != key) {
+        if(KeyNode->data > key) {
+            succ = KeyNode->data;
+            KeyNode = KeyNode->left;
+        } else {
+            pred = KeyNode->data;
+            KeyNode = KeyNode->right;
+        }
+    }
+
+    if(KeyNode == NULL) {
+        // Key not found
+        return {pred, succ};
+    }
+
+    // Predecessor
+    if(KeyNode->left != NULL) {
+        TreeNode* leftTree = KeyNode->left;
+        while(leftTree->right != NULL) {
+            pred = leftTree->data;
+            leftTree = leftTree->right;
+        }
+        pred = leftTree->data;
+    }
+
+    // Successor
+    if(KeyNode->right != NULL) {
+        TreeNode* rightTree = KeyNode->right;
+        while(rightTree->left != NULL){
+            succ = rightTree->data;
+            rightTree = rightTree->left;
+        }
+        succ = rightTree->data;
+    }
+
+    return {pred, succ};
+}

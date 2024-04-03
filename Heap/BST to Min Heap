@@ -1,0 +1,57 @@
+#include <vector>
+using namespace std;
+
+/*************************************************************
+    Following is the Binary Tree node structure
+
+    template<typename T>
+    class BinaryTreeNode 
+    {
+    public: 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+
+void inorder(BinaryTreeNode<int>* root, vector<int>& arr) {
+    if(root == NULL)
+        return;
+
+    inorder(root->left, arr);
+    arr.push_back(root->data);
+    inorder(root->right, arr);
+}
+
+void fillPreOrder(BinaryTreeNode<int>* root, int& index, const vector<int>& arr) {
+    if(root == NULL)
+        return;
+
+    if(index < arr.size()) {
+        root->data = arr[index++];
+        fillPreOrder(root->left, index, arr);
+        fillPreOrder(root->right, index, arr);
+    }
+}
+
+BinaryTreeNode<int>* bstToMinHeap(BinaryTreeNode<int>* root) {
+    if(root == NULL)
+        return root;
+
+    // Traverse the BST in inorder to get sorted array
+    vector<int> arr;
+    inorder(root, arr);
+
+    // Rebuild the BST with elements in preorder
+    int index = 0;
+    fillPreOrder(root, index, arr);
+    
+    return root;
+}

@@ -1,0 +1,26 @@
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+int getKthLargest(vector<int> &arr, int k) {
+    int n = arr.size();
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    // Calculate all possible sums of consecutive subarrays
+    for (int i = 0; i < n; i++) {
+        int sum = 0;
+        for (int j = i; j < n; j++) {
+            sum += arr[j];
+            minHeap.push(sum);
+            if (minHeap.size() > k) {
+                minHeap.pop(); // keep the size of minHeap to k
+            }
+			
+			}
+        }
+    
+
+    // The top of the minHeap will be the kth largest sum
+    return minHeap.top();
+}

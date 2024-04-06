@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+
+int countWaysToRepresentAsSumOfCubes(int N) {
+    int count = 0;
+    for (int A = 1; A * A * A <= N; ++A) {
+        int target = N - A * A * A;
+        int B = int(cbrt(target));
+        if (B * B * B == target && B >= 0) {
+            // Increment count if the sum of cubes equals N
+            count++;
+        }
+    }
+    return count;
+}
+
+int main() {
+    int T;
+    std::cout << "Enter the number of test cases: ";
+    std::cin >> T;
+
+    while (T--) {
+        int N;
+        std::cout << "Enter a positive integer N: ";
+        std::cin >> N;
+        
+        int ways = countWaysToRepresentAsSumOfCubes(N);
+        std::cout << "Number of ways to represent " << N << " as a sum of cubes of two integers: " << ways << std::endl;
+    }
+
+    return 0;
+}

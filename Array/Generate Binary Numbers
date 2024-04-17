@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+vector<string> generateBinaryNumbers(int n)
+{
+    vector<string> binaryNumbers;
+    for (int i = 1; i <= n; ++i) {
+        string binary = "";
+        int num = i;
+        while (num > 0) {
+            binary = (num % 2 == 0 ? "0" : "1") + binary;
+            num /= 2;
+        }
+        binaryNumbers.push_back(binary);
+    }
+    return binaryNumbers;
+}
+
+void printBinaryNumbers(const vector<string>& binaryNumbers)
+{
+    for(const auto& binary : binaryNumbers) {
+        cout << binary << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int testCases;
+    cout << "Enter the number of test cases: ";
+    cin >> testCases;
+
+    for (int i = 0; i < testCases; ++i) {
+        int n;
+        cout << "Enter the value of N for test case " << i + 1 << ": ";
+        cin >> n;
+        
+        vector<string> result = generateBinaryNumbers(n);
+        cout << "Binary numbers from 1 to " << n << ": ";
+        printBinaryNumbers(result);
+    }
+
+    return 0;
+}

@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+vector<int> bellmanFord(int n, int m, int src, vector<vector<int>> &edges) {
+    vector<int> distance(n+1, INT_MAX);
+    distance[src] = 0;
+
+    // Relax edges for (n-1) iterations
+    for(int i = 0; i < n - 1; i++) {
+        for(int j = 0; j < m; j++) {
+            int u = edges[j][0];
+            int v = edges[j][1];
+            int w = edges[j][2];
+
+            if(distance[u] != INT_MAX && distance[u] + w < distance[v]) {
+                distance[v] = distance[u] + w;
+            }
+        }
+    }
+
+    // Check for negative cycles
+    for(int j = 0; j < m; j++) {
+        int u = edges[j][0];
+        int v = edges[j][1];
+        int w = edges[j][2];
+
+        if(distance[u] != INT_MAX && distance[u] + w < distance[v]) {
+            // Negative cycle detected, return an array with INT_MAX for unreachable vertices
+            vector<int> result(n+1, INT_MAX);
+            result[src] = 0; // Distance from source to itself is 0
+            return result;
+        }
+    }
+
+    // No negative cycle detected, return the distances
+    return distance;
+}
+
+int main() {
+    int n, m, src;
+    cin >> n >> m >> src;
+
+    vector<vector<int>> edges(m, vector<int>(3));
+    for(int i = 0; i < m; i++) {
+        for(int j = 0; j < 3; j++) {
+            cin >> edges[i][j];
+        }
+    }
+
+    vector<int> distances = bellmanFord(n, m, src, edges);
+
+    for(int i = 1; i <= n; i++) {
+        if(distances[i] == INT_MAX) {
+            cout << "1000000000 "; // Print 10^8 for unreachable vertices
+        } else {
+            cout << distances[i] << " ";
+        }
+    }
+    cout << endl;
+
+    return 0;
+}

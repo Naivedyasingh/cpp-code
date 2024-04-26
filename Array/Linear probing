@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<int> linear_probing(vector<int>& keys) {
+    int n = keys.size();
+    vector<int> hash_table(n, -1);
+
+    for (int key : keys) {
+        int index = key % n;
+        while (hash_table[index] != -1) {
+            index = (index + 1) % n;
+        }
+        hash_table[index] = key;
+    }
+
+    return hash_table;
+}
+
+int main() {
+    int n;
+    cin >> n; // Input the size of the hash table
+
+    vector<int> keys1 = {5, 3, 2, 6, 4};
+    vector<int> keys2 = {1, 5, 3, 7};
+
+    vector<int> result1 = linear_probing(keys1);
+    vector<int> result2 = linear_probing(keys2);
+
+    // Printing the results
+    for (int key : result1) {
+        cout << key << " ";
+    }
+    cout << endl;
+
+    for (int key : result2) {
+        cout << key << " ";
+    }
+    cout << endl;
+
+    return 0;
+}

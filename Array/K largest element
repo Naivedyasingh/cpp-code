@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> Klargest(vector<int> &a, int k, int n) {
+    sort(a.begin(), a.end());
+    vector<int> result;
+    for (int i = n - k; i < n; i++) {
+        result.push_back(a[i]);
+    }
+    return result;
+}
+
+int main() {
+    vector<int> a = {3, 1, 4, 1, 5, 9, 2, 6};
+    int k = 3;
+    int n = a.size();
+    vector<int> largest = Klargest(a, k, n);
+    cout << "The " << k << " largest elements are: ";
+    for (int i = 0; i < largest.size(); ++i) {
+        cout << largest[i] << " ";
+    }
+    cout << endl;
+    return 0;
+}

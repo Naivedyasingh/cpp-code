@@ -1,0 +1,105 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Approach 1: Recursion + Memoization
+int solveMem(int ind, int T, vector<int> &num, vector<vector<int>> &dp) {
+    if (ind == 0) {
+        if (T % num[0] == 0) return T / num[0];
+        return 1e9;
+    }
+    
+    if (dp[ind][T] != -1) return dp[ind][T];
+    
+    int notTake = solveMem(ind - 1, T, num, dp);
+    int take = 1e9;
+    if (num[ind] <= T) {
+        take = 1 + solveMem(ind, T - num[ind], num, dp);
+    }
+    
+    return dp[ind][T] = min(take, notTake);
+}
+
+int minimumElementsMemo(vector<int> &num, int target) {
+    int n = num.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, -1));
+    int ans = solveMem(n - 1, target, num, dp);
+    if (ans >= 1e9) return -1;
+    return ans;
+}
+
+// Approach 2: Tabulation
+int minimumElementsTab(vector<int> &num, int target) {
+    int n = num.size();
+    vector<vector<int>> dp(n, vector<int>(target + 1, 1e9));
+    
+    // Base case
+    for (int i = 0; i <= target; i++) {
+        if (i % num[0] == 0) {
+            dp[0][i] = i / num[0];
+        }
+    }
+    
+    // Fill the DP table
+    for (int ind = 1; ind < n; ind++) {
+        for (int T = 0; T <= target; T++) {
+            int notTake = dp[ind - 1][T];
+            int take = 1e9;
+            if (num[ind] <= T) {
+                take = 1 + dp[ind][T - num[ind]];
+            }
+            dp[ind][T] = min(notTake, take);
+        }
+    }
+    
+    int ans = dp[n - 1][target];
+    if (ans >= 1e9) return -1;
+    return ans;
+}
+
+// Approach 3: Space Optimization
+int minimumElementsSpaceOpt(vector<int> &num, int target) {
+    int n = num.size();
+    vector<int> dp(target + 1, 1e9);
+    
+    // Base case
+    for (int i = 0; i <= target; i++) {
+        if (i % num[0] == 0) {
+            dp[i] = i / num[0];
+        }
+    }
+    
+    // Fill the DP array
+    for (int ind = 1; ind < n; ind++) {
+        for (int T = 0; T <= target; T++) {
+            int notTake = dp[T];
+            int take = 1e9;
+            if (num[ind] <= T) {
+                take = 1 + dp[T - num[ind]];
+            }
+            dp[T] = min(notTake, take);
+        }
+    }
+    
+    int ans = dp[target];
+    if (ans >= 1e9) return -1;
+    return ans;
+}
+
+int main() {
+    vector<int> num = {1, 2, 3};
+    int target = 7;
+
+    // Using Recursion + Memoization
+    int resultMemo = minimumElementsMemo(num, target);
+    cout << "Recursion + Memoization: The minimum number of coins required to form the target sum is " << resultMemo << endl;
+
+    // Using Tabulation
+    int resultTab = minimumElementsTab(num, target);
+    cout << "Tabulation: The minimum number of coins required to form the target sum is " << resultTab << endl;
+
+    // Using Space Optimization
+    int resultSpaceOpt = minimumElementsSpaceOpt(num, target);
+    cout << "Space Optimization: The minimum number of coins required to form the target sum is " << resultSpaceOpt << endl;
+
+    return 0; // Return 0 to indicate successful program execution
+}

@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    bool threeConsecutiveOdds(vector<int>& arr) {
+        int i = 0;
+        int j = 1;
+        int k = 2;
+        
+        while (k <= arr.size() - 1) {
+            if (arr[i] % 2 != 0 && arr[j] % 2 != 0 && arr[k] % 2 != 0) {
+                return true;
+            }
+            i++;
+            j++;
+            k++;
+        }
+        
+        return false;
+    }
+};
+
+int main() {
+    Solution sol;
+    
+    // Test cases
+    vector<int> arr1 = {1, 2, 3, 4, 5};
+    vector<int> arr2 = {2, 6, 4, 1, 8, 9, 11};
+    vector<int> arr3 = {1, 1, 1};
+    vector<int> arr4 = {2, 4, 6, 8, 10};
+    
+    cout << "Testing arr1: " << (sol.threeConsecutiveOdds(arr1) ? "True" : "False") << endl;
+    cout << "Testing arr2: " << (sol.threeConsecutiveOdds(arr2) ? "True" : "False") << endl;
+    cout << "Testing arr3: " << (sol.threeConsecutiveOdds(arr3) ? "True" : "False") << endl;
+    cout << "Testing arr4: " << (sol.threeConsecutiveOdds(arr4) ? "True" : "False") << endl;
+    
+    return 0;
+}

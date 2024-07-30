@@ -1,0 +1,73 @@
+
+#include <iostream>
+#include <stack>
+using namespace std;
+
+// Function to insert an element at the bottom of the stack
+void insertAtBottom(stack<int>& st, int x) {
+    // Base case: if the stack is empty, push the element
+    if (st.empty()) {
+        st.push(x);
+        return;
+    }
+
+    // Remove the top element
+    int topElement = st.top();
+    st.pop();
+    
+    // Recursively insert the element at the bottom
+    insertAtBottom(st, x);
+    
+    // Push the removed element back
+    st.push(topElement);
+}
+
+// Function to reverse the stack
+void reverseStack(stack<int>& st) {
+    // Base case: if the stack is empty, return
+    if (st.empty()) {
+        return;
+    }
+
+    // Remove the top element
+    int topElement = st.top();
+    st.pop();
+    
+    // Recursively reverse the remaining stack
+    reverseStack(st);
+    
+    // Insert the removed element at the bottom of the stack
+    insertAtBottom(st, topElement);
+}
+
+// Function to display the contents of the stack
+void printStack(stack<int> st) {
+    while (!st.empty()) {
+        cout << st.top() << " ";
+        st.pop();
+    }
+    cout << endl;
+}
+
+int main() {
+    stack<int> st;
+    
+    // Push elements onto the stack (5 -2 9 -7 3)
+    st.push(3);
+    st.push(-7);
+    st.push(9);
+    st.push(-2);
+    st.push(5);
+    
+    cout << "Original stack: ";
+    printStack(st);
+    
+    // Reverse the stack
+    reverseStack(st);
+    
+    cout << "Reversed stack: ";
+    printStack(st);
+    
+    return 0;
+}
+

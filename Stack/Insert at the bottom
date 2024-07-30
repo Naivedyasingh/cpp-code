@@ -1,0 +1,50 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+// Function to insert an element at the bottom of a stack
+void insertAtBottom(stack<int>& st, int x) {
+    // Base case: if the stack is empty, push the element
+    if (st.empty()) {
+        st.push(x);
+        return;
+    }
+    
+    // Recursively remove all elements
+    int topElement = st.top();
+    st.pop();
+    insertAtBottom(st, x);
+    
+    // Push the removed elements back
+    st.push(topElement);
+}
+
+// Function to display the contents of the stack
+void printStack(stack<int> st) {
+    while (!st.empty()) {
+        cout << st.top() << " ";
+        st.pop();
+    }
+    cout << endl;
+}
+
+int main() {
+    stack<int> st;
+    
+    // Push elements onto the stack
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    st.push(4);
+    
+    cout << "Original stack: ";
+    printStack(st);
+    
+    // Insert an element at the bottom
+    insertAtBottom(st, 0);
+    
+    cout << "Stack after inserting 0 at the bottom: ";
+    printStack(st);
+    
+    return 0;
+}

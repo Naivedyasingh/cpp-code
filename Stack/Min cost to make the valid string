@@ -1,0 +1,64 @@
+#include <iostream>
+#include <stack>
+#include <string>
+
+int minCostToMakeValid(const std::string& str) {
+    int n = str.size();
+    
+    // If the string length is odd, it's impossible to balance it
+    if (n % 2 != 0) {
+        return -1;
+    }
+
+    std::stack<char> st;
+
+    // Process the string to find mismatches
+    for (char ch : str) {
+        if (ch == '{') {
+            st.push(ch);
+        } else if (ch == '}') {
+            if (!st.empty() && st.top() == '{') {
+                st.pop();
+            } else {
+                st.push(ch);
+            }
+        }
+    }
+
+    // After processing, the stack will contain unmatched brackets
+    int openBrackets = 0, closeBrackets = 0;
+    while (!st.empty()) {
+        if (st.top() == '{') {
+            openBrackets++;
+        } else {
+            closeBrackets++;
+        }
+        st.pop();
+    }
+
+    // The cost to balance the string is half the total unmatched brackets
+    int cost = (openBrackets + closeBrackets) / 2;
+
+    return cost;
+}
+
+int main() {
+    std::vector<std::string> strings = {
+        "{{{}",
+        "{{}{}}",
+        "{}}{}}",
+        "{{{{",
+        "{{{}}"
+    };
+
+    for (const std::string& s : strings) {
+        int cost = minCostToMakeValid(s);
+        if (cost == -1) {
+            std::cout << "It is impossible to make the string \"" << s << "\" valid.\n";
+        } else {
+            std::cout << "Minimum cost to make the string \"" << s << "\" valid: " << cost << "\n";
+        }
+    }
+
+    return 0;
+}

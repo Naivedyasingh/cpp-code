@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+        vector<string> stack;
+        stringstream ss(path);
+        string dir;
+
+        // Split the path by '/'
+        while (getline(ss, dir, '/')) {
+            if (dir == "" || dir == ".") {
+                continue; // Ignore empty and current directory components
+            }
+            if (dir == "..") {
+                if (!stack.empty()) {
+                    stack.pop_back(); // Go up one directory level
+                }
+            } else {
+                stack.push_back(dir); // Valid directory name
+            }
+        }
+
+        // Reconstruct the simplified canonical path
+        string simplifiedPath;
+        for (const string& s : stack) {
+            simplifiedPath += "/" + s;
+        }
+
+        return simplifiedPath.empty() ? "/" : simplifiedPath;
+    }
+};
+
+int main() {
+    Solution sol;
+    vector<string> testPaths = {
+        "/home/",
+        "/home//foo/",
+        "/home/user/Documents/../Pictures",
+        "/../",
+        "/.../a/../b/c/../d/./"
+    };
+
+    for (const string& path : testPaths) {
+        cout << "Input: " << path << endl;
+        cout << "Output: " << sol.simplifyPath(path) << endl;
+    }
+
+    return 0;
+}
+

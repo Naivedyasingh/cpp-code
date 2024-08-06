@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+
+// Mock implementation of the knows function for testing purposes.
+// In a real scenario, this function would be provided and would return whether person A knows person B.
+bool knows(int A, int B) {
+    // Define the party matrix for testing (1 if A knows B, 0 otherwise)
+    // Example: 4 people, person 3 is the celebrity.
+    std::vector<std::vector<int>> M = {
+        {0, 1, 1, 1},
+        {0, 0, 1, 1},
+        {0, 0, 0, 1},
+        {0, 0, 0, 0}
+    };
+    return M[A][B];
+}
+
+int findCelebrity(int n) {
+    // Using a stack to find the potential celebrity
+    std::stack<int> s;
+    for (int i = 0; i < n; i++) {
+        s.push(i);
+    }
+
+    // Determine the potential celebrity
+    while (s.size() > 1) {
+        int a = s.top();
+        s.pop();
+        int b = s.top();
+        s.pop();
+
+        if (knows(a, b)) {
+            s.push(b);
+        } else {
+            s.push(a);
+        }
+    }
+
+    // The potential celebrity
+    int candidate = s.top();
+
+    // Verify if the candidate is a celebrity
+    for (int i = 0; i < n; i++) {
+        if (i != candidate && (knows(candidate, i) || !knows(i, candidate))) {
+            return -1;
+        }
+    }
+
+    return candidate;
+}
+
+int main() {
+    int n = 4; // Number of people at the party
+    int celebrity = findCelebrity(n);
+
+    if (celebrity == -1) {
+        std::cout << "There is no celebrity in the party." << std::endl;
+    } else {
+        std::cout << "The celebrity is person with ID " << celebrity << "." << std::endl;
+    }
+
+    return 0;
+}

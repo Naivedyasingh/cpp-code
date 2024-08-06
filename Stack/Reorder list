@@ -1,0 +1,84 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if (!head || !head->next || !head->next->next) return;
+
+        // Step 1: Push all nodes onto a stack
+        stack<ListNode*> s;
+        ListNode* curr = head;
+        while (curr) {
+            s.push(curr);
+            curr = curr->next;
+        }
+
+        // Step 2: Reorder the list
+        curr = head;
+        while (!s.empty()) {
+            ListNode* top = s.top();
+            s.pop();
+            
+            if (curr == top || curr->next == top) {
+                top->next = nullptr;
+                break;
+            }
+
+            top->next = curr->next;
+            curr->next = top;
+            curr = top->next;
+        }
+    }
+};
+
+// Helper functions to create and print the list
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->val << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+ListNode* createList(const vector<int>& vals) {
+    ListNode* dummy = new ListNode();
+    ListNode* curr = dummy;
+    for (int val : vals) {
+        curr->next = new ListNode(val);
+        curr = curr->next;
+    }
+    return dummy->next;
+}
+
+int main() {
+    Solution sol;
+
+    // Example 1
+    ListNode* head1 = createList({1, 2, 3, 4});
+    cout << "Original list: ";
+    printList(head1);
+    sol.reorderList(head1);
+    cout << "Reordered list: ";
+    printList(head1);
+
+    // Example 2
+    ListNode* head2 = createList({1, 2, 3, 4, 5});
+    cout << "Original list: ";
+    printList(head2);
+    sol.reorderList(head2);
+    cout << "Reordered list: ";
+    printList(head2);
+
+    return 0;
+}

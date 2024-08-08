@@ -1,0 +1,195 @@
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        if (root == nullptr) return result;
+
+        stack<TreeNode*> stack1, stack2;
+        stack1.push(root);
+
+        while (!stack1.empty()) {
+            TreeNode* node = stack1.top();
+            stack1.pop();
+            stack2.push(node);
+
+            if (node->left) {
+                stack1.push(node->left);
+            }
+            if (node->right) {
+                stack1.push(node->right);
+            }
+        }
+
+        while (!stack2.empty()) {
+            result.push_back(stack2.top()->val);
+            stack2.pop();
+        }
+
+        return result;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        if (root == nullptr) return result;
+
+        stack<TreeNode*> stack;
+        TreeNode* prev = nullptr;
+
+        stack.push(root);
+
+        while (!stack.empty()) {
+            TreeNode* curr = stack.top();
+
+            // If going down the tree
+            if (prev == nullptr || prev->left == curr || prev->right == curr) {
+                if (curr->left) {
+                    stack.push(curr->left);
+                } else if (curr->right) {
+                    stack.push(curr->right);
+                }
+            }
+            // If going up from the left
+            else if (curr->left == prev) {
+                if (curr->right) {
+                    stack.push(curr->right);
+                }
+            }
+            // If going up from the right
+            else {
+                result.push_back(curr->val);
+                stack.pop();
+            }
+
+            prev = curr;
+        }
+
+        return result;
+    }
+};
+
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        postTraversal(root, result);
+        return result;
+    }
+private:
+    void postTraversal(TreeNode* root, vector<int>& result) {  // Pass by reference
+        if (root == nullptr) {
+            return;
+        }
+        postTraversal(root->left, result);
+        postTraversal(root->right, result);
+        result.push_back(root->val);
+    }
+};
+
+// Helper function to create a binary tree
+TreeNode* createTree() {
+    // Create nodes
+    TreeNode* node1 = new TreeNode(1);
+    TreeNode* node2 = new TreeNode(2);
+    TreeNode* node3 = new TreeNode(3);
+    TreeNode* node4 = new TreeNode(4);
+    TreeNode* node5 = new TreeNode(5);
+
+    // Set up the tree structure
+    node1->left = node2;
+    node1->right = node3;
+    node2->left = node4;
+    node2->right = node5;
+
+    return node1;  // Return the root of the tree
+}
+
+// Helper function to print the vector
+void printVector(const vector<int>& v) {
+    for (int val : v) {
+        cout << val << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    // Create the tree
+    TreeNode* root = createTree();
+    
+    // Create a Solution object and call postorderTraversal
+    Solution sol;
+    vector<int> result = sol.postorderTraversal(root);
+    
+    // Print the result
+    cout << "Postorder Traversal: ";
+    printVector(result);
+
+    // Clean up allocated memory (not shown in the example for simplicity)
+    // You should ideally implement a destructor or a separate function to delete the tree nodes
+
+    return 0;
+}

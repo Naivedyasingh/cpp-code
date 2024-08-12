@@ -1,0 +1,150 @@
+#include <stack>
+using namespace std;
+
+class MyQueue {
+private:
+    stack<int> s;
+
+public:
+    MyQueue() {
+    }
+
+    // Push element x to the back of queue.
+    void push(int x) {
+        s.push(x);
+    }
+
+    // Removes the element from in front of queue and returns that element.
+    int pop() {
+        if (s.empty()) {
+            return -1;  // Or throw an exception if the queue is empty
+        }
+
+        int topElement = s.top();
+        s.pop();
+
+        // If this is the last element, return it as the front of the queue
+        if (s.empty()) {
+            return topElement;
+        }
+
+        // Recurse to remove the bottom element, simulating the front of the queue
+        int front = pop();
+
+        // Push the top element back after the recursion unwinds
+        s.push(topElement);
+
+        return front;
+    }
+
+    // Get the front element.
+    int peek() {
+        if (s.empty()) {
+            return -1;  // Or throw an exception if the queue is empty
+        }
+
+        int topElement = s.top();
+        s.pop();
+
+        // If this is the last element, it represents the front of the queue
+        if (s.empty()) {
+            s.push(topElement);  // Push it back before returning
+            return topElement;
+        }
+
+        // Recurse to get the bottom element, simulating the front of the queue
+        int front = peek();
+
+        // Push the top element back after the recursion unwinds
+        s.push(topElement);
+
+        return front;
+    }
+
+    // Returns whether the queue is empty.
+    bool empty() {
+        return s.empty();
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stack>
+using namespace std;
+
+class MyQueue {
+private:
+    stack<int> s1, s2;
+
+    // Helper function to transfer elements from s1 to s2
+    void transfer() {
+        while (!s1.empty()) {
+            s2.push(s1.top());
+            s1.pop();
+        }
+    }
+
+public:
+    MyQueue() {
+    }
+
+    // Push element x to the back of queue.
+    void push(int x) {
+        s1.push(x);
+    }
+
+    // Removes the element from in front of queue and returns that element.
+    int pop() {
+        if (s2.empty()) {
+            transfer();
+        }
+        int front = s2.top();
+        s2.pop();
+        return front;
+    }
+
+    // Get the front element.
+    int peek() {
+        if (s2.empty()) {
+            transfer();
+        }
+        return s2.top();
+    }
+
+    // Returns whether the queue is empty.
+    bool empty() {
+        return s1.empty() && s2.empty();
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
+
+

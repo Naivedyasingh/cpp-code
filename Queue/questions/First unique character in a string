@@ -1,0 +1,63 @@
+#include <queue>
+#include <unordered_map>
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char, int> charCount;
+        queue<char> q;
+
+        // First pass: Count the frequency of each character and maintain order
+        for (char c : s) {
+            charCount[c]++;
+            // Only add the character to the queue if it's seen for the first time
+            if (charCount[c] == 1) {
+                q.push(c);
+            }
+        }
+
+        // Second pass: Find the first unique character
+        while (!q.empty()) {
+            char front = q.front();
+            if (charCount[front] == 1) {
+                return s.find(front);  // Return the index of the first unique character
+            }
+            q.pop();  // Remove characters from the queue that are no longer unique
+        }
+
+        return -1;  // If no unique character is found
+    }
+};
+
+
+
+
+
+
+
+#include <unordered_map>
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char, int> charCount;
+
+        // First pass: count the frequency of each character
+        for (char c : s) {
+            charCount[c]++;
+        }
+
+        // Second pass: find the first unique character
+        for (int i = 0; i < s.size(); i++) {
+            if (charCount[s[i]] == 1) {
+                return i;  // Return the index of the first unique character
+            }
+        }
+
+        return -1;  // If no unique character is found
+    }
+};

@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <climits>
+
+using namespace std;
+
+int shortestSubarray(vector<int>& nums, int k) {
+    int n = nums.size();
+    vector<long long> prefix_sum(n + 1, 0);
+    
+    // Calculate prefix sums
+    for (int i = 0; i < n; ++i) {
+        prefix_sum[i + 1] = prefix_sum[i] + nums[i];
+    }
+    
+    deque<int> dq;
+    int min_len = INT_MAX;
+    
+    for (int i = 0; i <= n; ++i) {
+        // Check if the current prefix sum minus the front of deque is at least k
+        while (!dq.empty() && prefix_sum[i] - prefix_sum[dq.front()] >= k) {
+            min_len = min(min_len, i - dq.front());
+            dq.pop_front();
+        }
+        
+        // Maintain increasing order of prefix sums in the deque
+        while (!dq.empty() && prefix_sum[i] <= prefix_sum[dq.back()]) {
+            dq.pop_back();
+        }
+        
+        dq.push_back(i);
+    }
+    
+    return min_len == INT_MAX ? -1 : min_len;
+}
+
+int main() {
+    vector<int> nums1 = {1};
+    int k1 = 1;
+    cout << "Example 1: " << shortestSubarray(nums1, k1) << endl; // Output: 1
+
+    vector<int> nums2 = {1, 2};
+    int k2 = 4;
+    cout << "Example 2: " << shortestSubarray(nums2, k2) << endl; // Output: -1
+
+    vector<int> nums3 = {2, -1, 2, 3, -2, 4};
+    int k3 = 5;
+    cout << "Example 3: " << shortestSubarray(nums3, k3) << endl; // Output: 2
+
+    return 0;
+}

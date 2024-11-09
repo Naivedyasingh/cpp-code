@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+int threeSumClosest(vector<int>& nums, int target) {
+    sort(nums.begin(), nums.end()); // Step 1: Sort the array
+    int closest_sum = nums[0] + nums[1] + nums[2]; // Initialize closest_sum
+
+    // Step 2: Fix each element and use binary search for the other two
+    for (int i = 0; i < nums.size() - 2; ++i) {
+        for (int j = i + 1; j < nums.size() - 1; ++j) {
+            int left = j + 1, right = nums.size() - 1;
+            int needed = target - nums[i] - nums[j];
+            
+            // Binary search for the closest number to `needed`
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                int current_sum = nums[i] + nums[j] + nums[mid];
+                
+                // Update closest_sum if closer to target
+                if (abs(current_sum - target) < abs(closest_sum - target)) {
+                    closest_sum = current_sum;
+                }
+
+                if (nums[mid] < needed) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+    }
+
+    return closest_sum;
+}
+
+int main() {
+    vector<int> nums1 = {-1, 2, 1, -4};
+    int target1 = 1;
+    cout << "Closest sum to " << target1 << " is " << threeSumClosest(nums1, target1) << endl;
+
+    vector<int> nums2 = {0, 0, 0};
+    int target2 = 1;
+    cout << "Closest sum to " << target2 << " is " << threeSumClosest(nums2, target2) << endl;
+
+    return 0;
+}
+

@@ -1,0 +1,122 @@
+class Solution {
+public:
+    void solve(string& digit,string output,int index,vector<string>& ans,string map[]){
+   if(index==digit.size()){
+       ans.push_back(output);
+       return;
+   }
+        int num=digit[index]-'0';
+        string val=map[num];
+        for(int i=0;i<val.size();i++){
+            output.push_back(val[i]);
+            solve(digit,output,index+1,ans,map);
+            output.pop_back();
+        }
+    }
+    
+    
+    
+    vector<string> letterCombinations(string digit) {
+        vector <string> ans;
+        if(digit.empty()){
+          return ans;}
+        int index=0;
+         string map[10] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        string output;
+        solve(digit,output,index,ans,map);
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+Explaination-------------
+Step 1: Setup
+digits = "23"
+We initialize the mapping array as follows:
+cpp
+Copy code
+string mapping[10] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+The main letterCombinations function initializes ans as an empty vector and calls the recursive solve function with parameters:
+cpp
+Copy code
+solve(digits, output, index = 0, ans, mapping);
+Step 2: Recursive Process Using solve
+Let's trace the recursive calls made by solve step-by-step:
+
+First Call to solve:
+
+digits = "23", output = "", index = 0.
+The first digit is 2, which maps to "abc" in mapping.
+We start a loop over each character in "abc" and recursively call solve for each.
+Second Call to solve (when we choose 'a' from "abc"):
+
+output = "a", index = 1.
+Now, we move to the next digit, which is 3 (mapping to "def").
+We loop over each character in "def" and recursively call solve.
+Third Call to solve (when we choose 'd' from "def" with output = "a"):
+
+output = "ad", index = 2.
+Here, index == digits.size(), so we have a complete combination.
+We add "ad" to ans and backtrack by removing 'd' from output to explore other options.
+Backtracking and Exploring Other Combinations:
+
+After adding "ad" to ans, we go back to the third call with output = "a", index = 1.
+Next, we choose 'e' from "def" and recursively call solve with output = "ae".
+This leads to a complete combination "ae", which is added to ans.
+We backtrack and continue with the next character, 'f', eventually adding "af" to ans.
+Returning to Explore More Options in "abc":
+
+Once all combinations starting with "a" ("ad", "ae", "af") are added to ans, we backtrack to the first call (index = 0) to explore the next characters in "abc": 'b' and 'c'.
+Repeating the Process for 'b' and 'c':
+
+With output = "b" and output = "c", we go through the same recursive exploration with "def", generating combinations "bd", "be", "bf", "cd", "ce", and "cf".
+Final Output
+After all recursive calls are complete, ans contains:
+
+cpp
+Copy code
+["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
+Visualization of the Recursive Tree
+The recursive calls for digits = "23" can be visualized as a tree:
+
+arduino
+Copy code
+         ""
+       / | \
+     "a" "b" "c"
+    / | \ / | \ / | \
+ "ad" "ae" "af" "bd" "be" "bf" "cd" "ce" "cf"
+Each path from the root to a leaf node represents a complete combination, which we store in ans. This is an example of backtracking where we build output character-by-character, explore all options, and backtrack after each full combination is recorded.
+
+
+
+
+
+
+You said:
+2-'0' value of it
+ChatGPT said:
+ChatGPT
+In C++, when you see an expression like 2 - '0', it converts a character representing a digit into its integer value.
+
+Here's how it works:
+
+The character '0' has an ASCII value of 48.
+The character '2' has an ASCII value of 50.
+When you subtract '0' from '2':
+
+cpp
+Copy code
+'2' - '0' = 50 - 48 = 2
+This effectively converts the character '2' to the integer 2.
+
+So, 2 - '0' (or more generally digit - '0') is a common way to convert a character digit (like '0' to '9') to its corresponding integer value (0 to 9).

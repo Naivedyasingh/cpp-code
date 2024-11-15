@@ -1,0 +1,39 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+void backtrack(std::vector<std::string>& result, std::string current, int open, int close, int n) {
+    // Base Case: If we've added 2 * n characters, we have a complete combination
+    if (current.length() == 2 * n) {
+        result.push_back(current); // Add the complete combination to the result
+        return;
+    }
+    
+    // Recursive Case 1: Add an opening parenthesis if we haven't reached the maximum
+    if (open < n) {
+        backtrack(result, current + "(", open + 1, close, n);
+    }
+    
+    // Recursive Case 2: Add a closing parenthesis if it keeps the combination valid
+    if (close < open) {
+        backtrack(result, current + ")", open, close + 1, n);
+    }
+}
+
+std::vector<std::string> generateParentheses(int n) {
+    std::vector<std::string> result;  // Vector to store all valid combinations
+    backtrack(result, "", 0, 0, n);   // Start backtracking with an empty combination
+    return result;
+}
+
+int main() {
+    int n = 3;
+    std::vector<std::string> combinations = generateParentheses(n);
+
+    std::cout << "All combinations of well-formed parentheses for n = " << n << ":\n";
+    for (const auto& comb : combinations) {
+        std::cout << comb << "\n";
+    }
+
+    return 0;
+}
